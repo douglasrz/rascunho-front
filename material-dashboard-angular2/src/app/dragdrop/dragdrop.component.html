@@ -1,0 +1,19 @@
+<div class="card">
+    <div class="card-header card-header-primary">
+        <h4 class="card-title">Calcular Fundos</h4>
+    </div>
+    <div class="card-body table-responsive">
+        <div cdkDropList class="example-list mt-20" (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let fundo of fundos" cdkDrag>
+                <div class="drag-index">{{fundo.position}}</div>
+                <div class="w-10 drag-icon">
+                    <i *ngIf="!fundo.isDisable" class="material-icons disable">reorder</i>
+                    <i class="material-icons" cdkDragHandle>reorder</i>
+                </div>
+                <div class="w-100 drag-content">
+                    <mat-checkbox (change)="fundo.isDisable = !fundo.isDisable">{{fundo.name}}</mat-checkbox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

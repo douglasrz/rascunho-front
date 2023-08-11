@@ -1,0 +1,66 @@
+<div class="row">
+  <div class="col-lg-5 col-md-5">
+    <mat-table #table [dataSource]="fundos" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)"
+      cdkDropListData="fundos" [cdkDropListDisabled]="dragDisabled">
+      <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="selecionado">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox></mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-checkbox (change)="changeSelect(element)"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position" sticky>
+        <mat-header-cell *matHeaderCellDef> Ordem </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-icon class="dragCursor" (mousedown)="dragDisabled = false;">reorder</mat-icon>
+          <span>{{element.position}}</span>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+      <!-- 
+    <ng-container matColumnDef="data_base">
+      <mat-header-cell *matHeaderCellDef> Data Base </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </mat-cell>
+    </ng-container> -->
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></mat-row>
+    </mat-table>
+  </div>
+  <div class="col-lg-2 col-md-2" style="float:none;margin:auto;">
+    <button mat-stroked-button color="primary" (click)="inserir()">
+      Inserir
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+  <div class="col-lg-5 col-md-5">
+    <mat-nav-list>
+      <mat-expansion-panel *ngFor="let calculo of listaCalculo">
+        <mat-expansion-panel-header>
+          {{calculo.data_base}}
+        </mat-expansion-panel-header>
+        <a mat-list-item *ngFor="let fundo of calculo.fundos">
+          {{fundo.name}}
+        </a>
+      </mat-expansion-panel>
+    </mat-nav-list>
+  </div>
+</div>

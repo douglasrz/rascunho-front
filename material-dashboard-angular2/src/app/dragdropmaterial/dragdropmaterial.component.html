@@ -1,0 +1,18 @@
+<div class="card">
+    <div class="card-header card-header-primary">
+        <h4 class="card-title">Calcular Fundos</h4>
+    </div>
+    <div class="card-body table-responsive">
+        <div class="example-container">
+            <div cdkDropList [cdkDropListData]="fundos" class="example-list" (cdkDropListDropped)="drop($event)">
+                <div class="example-box" *ngFor="let fundo of fundos" cdkDrag [cdkDragDisabled]="!fundo.selecionado">
+                    <mat-checkbox (change)="changeSelect(fundo)"></mat-checkbox>
+                    {{fundo.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button (click)="calcular()">Calcular</button>
+    </div>
+</div>
