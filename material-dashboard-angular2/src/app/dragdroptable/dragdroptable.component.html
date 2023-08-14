@@ -1,9 +1,11 @@
 <div class="row">
-  <div class="col-lg-5 col-md-5">
-    <mat-table #table [dataSource]="fundos" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)"
-      cdkDropListData="fundos" [cdkDropListDisabled]="dragDisabled">
-      <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
+  <div class="col-lg-6 col-md-6">
+    <mat-form-field>
+      <mat-label>Busque pelo fundo</mat-label>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+    <mat-table #table [dataSource]="dataSource" class="mat-elevation-z8" cdkDropList (cdkDropListDropped)="drop($event)"
+      cdkDropListData="dataSource" [cdkDropListDisabled]="dragDisabled">
 
       <!-- Position Column -->
       <ng-container matColumnDef="selecionado">
@@ -29,38 +31,42 @@
         <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
         <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
       </ng-container>
-      <!-- 
-    <ng-container matColumnDef="data_base">
-      <mat-header-cell *matHeaderCellDef> Data Base </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker">
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </mat-cell>
-    </ng-container> -->
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag [cdkDragData]="row"></mat-row>
     </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100, 200]"></mat-paginator>
   </div>
-  <div class="col-lg-2 col-md-2" style="float:none;margin:auto;">
-    <button mat-stroked-button color="primary" (click)="inserir()">
-      Inserir
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-  </div>
-  <div class="col-lg-5 col-md-5">
-    <mat-nav-list>
-      <mat-expansion-panel *ngFor="let calculo of listaCalculo">
-        <mat-expansion-panel-header>
-          {{calculo.data_base}}
-        </mat-expansion-panel-header>
-        <a mat-list-item *ngFor="let fundo of calculo.fundos">
-          {{fundo.name}}
-        </a>
-      </mat-expansion-panel>
-    </mat-nav-list>
+  <div class="col-lg-6 col-md-6">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 ml-auto mr-auto">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Data base</mat-label>
+              <input matInput [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <button mat-button class="btn btn-light btn-block" color="primary" (click)="adicionar()">
+              Adicionar
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button mat-button class="btn btn-danger btn-block">Calcular</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-list role="list" class="mat-elevation-z8" style="background-color: white;">
+      <mat-list-item role="listitem" *ngFor="let calculo of listaCalculo">
+        <mat-icon matListIcon>label</mat-icon>  
+        <h4 matLine>{{calculo.data_base}}</h4>
+        <p matLine>{{calculo.fundos.length}} fundos</p>
+      </mat-list-item>
+    </mat-list>
   </div>
 </div>

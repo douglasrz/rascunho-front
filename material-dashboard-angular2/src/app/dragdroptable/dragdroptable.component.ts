@@ -1,15 +1,18 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Fundo } from './fundo.model';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ListaCalculo } from './listacalculo.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { FundosMock } from "./items";
+
 
 @Component({
   selector: 'app-dragdroptable',
   templateUrl: './dragdroptable.component.html',
   styleUrls: ['./dragdroptable.component.scss']
 })
-export class DragDropTableComponent {
+export class DragDropTableComponent implements AfterViewInit {
 
   listaCalculo: Array<ListaCalculo> = [
     {
@@ -41,43 +44,30 @@ export class DragDropTableComponent {
       }]
     }
   ]
-  @ViewChild('table', { static: true }) table: MatTable<Fundo>;
-
-  displayedColumns: string[] = ['selecionado', 'position', 'name'];
-  fundos: Array<Fundo> = [{
-    name: 'INTSAMBA',
-    position: 0,
-    selecionado: false,
-    data_base: ''
-  }, {
-    name: 'KINEA',
-    position: 1,
-    selecionado: false,
-    data_base: ''
-  }, {
-    name: 'INTMORGAN',
-    position: 2,
-    selecionado: false,
-    data_base: ''
-  }, {
-    name: '173-ITAÚ INDEX',
-    position: 3,
-    selecionado: false,
-    data_base: ''
-  }, {
-    name: 'FAC 001',
-    position: 4,
-    selecionado: false,
-    data_base: ''
-  }, {
-    name: 'FOF',
-    position: 5,
-    selecionado: false,
-    data_base: ''
-  }
-  ];
-
+  
   dragDisabled = true;
+  dataSource: MatTableDataSource<Fundo>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('table', { static: true }) table: MatTable<Fundo>;
+  displayedColumns: string[] = ['selecionado', 'position', 'name'];
+  fundos: Array<Fundo> = FundosMock;
+  
+  constructor() {
+    this.updateFieldPositionFundo();
+    this.dataSource = new MatTableDataSource(this.fundos);
+  }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+  
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   drop(event: CdkDragDrop<Fundo[]>) {
     // Return the drag container to disabled.
@@ -91,7 +81,11 @@ export class DragDropTableComponent {
     return this.fundos.filter(x => x.selecionado).length;
   }
 
-  inserir() {
+  adicionar() {
+    console.log(this.fundos)
+  }
+  
+  calcular() {
     console.log(this.fundos)
   }
 
@@ -104,8 +98,8 @@ export class DragDropTableComponent {
   atualizarPosicao(fundo, currentIndex) {
     const previousIndex = this.fundos.findIndex((d) => d === fundo);
     moveItemInArray(this.fundos, previousIndex, currentIndex);
-    this.table.renderRows();
     this.updateFieldPositionFundo();
+    this.table.renderRows();
   }
 
   updateFieldPositionFundo() {

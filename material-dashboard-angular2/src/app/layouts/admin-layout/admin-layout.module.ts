@@ -28,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatNativeDateModule} from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     MatNativeDateModule,
     MatListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule
   ],
   declarations: [
     DashboardComponent,
