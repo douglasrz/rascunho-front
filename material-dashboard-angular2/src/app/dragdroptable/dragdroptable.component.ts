@@ -14,52 +14,44 @@ import { FundosMock } from "./items";
 })
 export class DragDropTableComponent implements AfterViewInit {
 
-  listaCalculo: Array<ListaCalculo> = [
+  listaCalculo: Array<Fundo> = [
     {
       data_base: '12/01/2023',
-      fundos: [{
-        name: 'INTSAMBA',
-        position: 0,
-        selecionado: false,
-        data_base: ''
-      }, {
-        name: 'KINEA',
-        position: 1,
-        selecionado: false,
-        data_base: ''
-      }]
+      name: 'INTSAMBA',
+      position: 0,
+      selecionado: false,
     },
     {
-      data_base: '10/01/2023',
-      fundos: [{
-        name: 'FAC 001',
-        position: 4,
-        selecionado: false,
-        data_base: ''
-      }, {
-        name: 'FOF',
-        position: 5,
-        selecionado: false,
-        data_base: ''
-      }]
+      data_base: '12/01/2023',
+      name: 'FAC 001',
+      position: 1,
+      selecionado: false,
+    },
+    {
+      data_base: '12/01/2023',
+      name: 'KINEA',
+      position: 2,
+      selecionado: false,
     }
   ]
-  
+
   dragDisabled = true;
   dataSource: MatTableDataSource<Fundo>;
+  dataSourceCalculos: MatTableDataSource<Fundo>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('table', { static: true }) table: MatTable<Fundo>;
-  displayedColumns: string[] = ['selecionado', 'position', 'name'];
+  displayedColumns: string[] = ['selecionado', 'position', 'name', 'date', 'duplicate_row'];
   fundos: Array<Fundo> = FundosMock;
-  
+
   constructor() {
     this.updateFieldPositionFundo();
     this.dataSource = new MatTableDataSource(this.fundos);
+    this.dataSourceCalculos = new MatTableDataSource(this.listaCalculo);
   }
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
-  
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -77,14 +69,26 @@ export class DragDropTableComponent implements AfterViewInit {
     }
   }
 
+  changeData(event) {
+    console.log(event)
+  }
+
   countFundosSelecionados() {
     return this.fundos.filter(x => x.selecionado).length;
+  }
+
+  duplicarRow(fundo: Fundo) {
+    const fundoDuplicado = Object.assign({}, fundo);
+    fundoDuplicado.data_base = ''
+    this.dataSource.data.splice(fundo.position + 1, 0, fundoDuplicado);
+    this.updateFieldPositionFundo();
+    this.dataSource._updateChangeSubscription()
   }
 
   adicionar() {
     console.log(this.fundos)
   }
-  
+
   calcular() {
     console.log(this.fundos)
   }

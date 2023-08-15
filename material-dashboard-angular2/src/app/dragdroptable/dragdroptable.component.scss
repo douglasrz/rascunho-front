@@ -4,9 +4,15 @@ table {
   width: 100%;
 }
 
-.dragCursor {
+.dragCursorAtivo {
   margin-right: 16px;
   cursor: move;
+}
+
+.dragCursorInativo {
+  margin-right: 16px;
+  cursor: none;
+  color: rgba(0,0,0,.17)
 }
 
 .cdk-drag-preview {
